@@ -12,7 +12,7 @@
             </div>
             <div class="journal-date">
               <span class="label">Date</span>
-              <div v-text="$page.post.date"/>
+              <div v-text="$page.post.updated_at"/>
             </div>
             <div class="journal-time">
               <span class="label">Time</span>
@@ -21,7 +21,7 @@
           </div>          
         </div>
 
-        <JournalContent :content="$page.post.content" />
+        <JournalContent :content="mdToHtml($page.post.content)" />
 
       </div>
     </div>
@@ -33,8 +33,7 @@ query JournalPost ($path: String!) {
   post: journalPost (path: $path) {
     title
     author
-    date (format: "D. MMMM YYYY")
-    timeToRead
+    updated_at (format: "D. MMMM YYYY")
     content
   }
 }
@@ -42,6 +41,7 @@ query JournalPost ($path: String!) {
 
 <script>
 import JournalContent from "@/components/JournalContent"
+import { md } from '@/utils/md'
 
 export default {
   components: {
@@ -50,6 +50,11 @@ export default {
   metaInfo () {
     return {
       title: this.$page.post.title
+    }
+  },
+  methods: {
+    mdToHtml(content) {
+      return md.render(content)
     }
   }
 }

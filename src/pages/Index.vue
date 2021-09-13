@@ -10,14 +10,20 @@
 
 <page-query>
 query Posts {
-	projects: allProjectPost {
+  projects: allProjectPost (sortBy: "updated_at") {
     edges {
       node {
         id
-        date (format: "YYYY")
+        created_at (format: "YYYY")
         title
-        categories
-        thumbnail (quality: 90)
+        categories {
+          id
+          title
+        }
+        thumbnail {
+          url
+          width
+        }
         path
       }
     }

@@ -13,21 +13,21 @@
                 <span class="label">Categories</span>
                 <span 
                   class="category"
-                  v-for="(category, index) in $page.post.categories" 
-                  :key="index"
-                  v-text="category"
+                  v-for="category in $page.post.categories" 
+                  :key="category.id"
+                  v-text="category.title"
                 />
               </div>
             </div>
 
             <div class="year-container">
               <span class="label">Year</span>
-              <div v-html="$page.post.date"/>
+              <div v-html="$page.post.updated_at"/>
             </div>
           </div>
         </div>
 
-        <div v-html="$page.post.content" class="content" />
+        <div v-html="mdToHtml($page.post.content)" class="content" />
 
       </div>
 
@@ -39,9 +39,12 @@
 query ProjectPost ($path: String!) {
   post: projectPost (path: $path) {
     title
-    date (format: "YYYY")
+    updated_at (format: "YYYY")
     content
-    categories
+    categories {
+      id
+      title
+    }
     project_bg_color
     project_fg_color
   }
@@ -49,6 +52,8 @@ query ProjectPost ($path: String!) {
 </page-query>
 
 <script>
+import { md } from '@/utils/md'
+
 export default {
   metaInfo () {
     return {
@@ -56,6 +61,11 @@ export default {
       bodyAttrs: {
         style: `background-color: ${this.$page.post.project_bg_color ? this.$page.post.project_bg_color : 'var(--color-base)'}; color: ${this.$page.post.project_fg_color ? this.$page.post.project_fg_color : 'var(--color-contrast)'}`
       }
+    }
+  },
+  methods: {
+    mdToHtml(content) {
+      return md.render(content)
     }
   }
 }
