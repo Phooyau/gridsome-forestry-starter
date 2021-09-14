@@ -2,13 +2,11 @@
     <div class="projects">
         <div class="project" v-for="item in projects" :key="item.node.id">
             <g-link :to="item.node.path" class="project-link">
-            <g-image
+            <img
                 :src="`${GRIDSOME_API_URL + item.node.thumbnail.url}`"
-                :width="item.node.thumbnail.width + ''"
-                fit="cover"
+                :width="item.node.thumbnail.width"
                 :alt="item.node.title"
-                class="thumbnail"
-            />
+                class="thumbnail">
             <h3 class="project-title">{{ item.node.title }}</h3>
             <div class="categories">
                 <span class="category" v-for="item in item.node.categories" :key="item.id">{{ item.title }}</span>

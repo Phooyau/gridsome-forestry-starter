@@ -4,28 +4,28 @@
 
       <div class="contact-header">
         <h1 class="contact-title">Say hi!</h1>
-        <p>Leave me a note with any questions you might have, I'll get back to you as soon as possible.</p>
+        <p>如果你有什么问题，请给我留个便条，我会尽快给你答复的。</p>
       </div>
 
       <form class="contact-form" name="contact">
 
         <div class="sender-info">
           <div>
-            <label for="name" class="label">Your name</label>
-            <input type="text" name="name" />
+            <label for="name" class="label">姓名</label>
+            <input v-model.trim="formData.name" type="text" name="name" />
           </div>
           <div>
-            <label for="email" class="label">Your email</label>
-            <input type="email" name="email" />
+            <label for="email" class="label">邮箱</label>
+            <input v-model.trim="formData.email" type="email" name="email" />
           </div>
         </div>
 
         <div class="message">
-          <label for="message" class="label">Message</label>
-          <textarea name="message"></textarea>
+          <label for="message" class="label">内容</label>
+          <textarea v-model.trim="formData.message" name="message"></textarea>
         </div>
 
-        <button class="button">Submit form</button>
+        <button class="button" @click.prevent="onSubmit">提交</button>
 
       </form>
 
@@ -34,7 +34,29 @@
 </template>
 
 <script>
-export default {}
+import axios from 'axios'
+export default {
+  name: 'ContactPage',
+  data() {
+    return {
+      formData: {
+        name: '',
+        email: '',
+        message: ''
+      }
+    }
+  },
+  methods: {
+    async onSubmit() {
+      try {
+        const { data } = await axios.post(`${this.GRIDSOME_API_URL}/contacts`, this.formData)
+        alert('发送成功')
+      } catch (err) {
+        alert('发送失败')
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>
